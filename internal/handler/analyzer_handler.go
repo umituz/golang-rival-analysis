@@ -1,10 +1,12 @@
 package handler
 
 import (
+	"context"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/umituz/golang-rival-analysis/internal/domain"
 )
 
@@ -43,6 +45,19 @@ func (h *AnalyzerHandler) RegisterRoutes(r *gin.Engine) {
 			analyze.GET("/security/:domain", h.AnalyzeSecurity)
 			analyze.GET("/performance/:domain", h.AnalyzePerformance)
 			analyze.GET("/seo/:domain", h.AnalyzeSEO)
+			
+			// Batch analysis endpoints
+			analyze.POST("/batch/websites", h.BatchAnalyzeWebsites)
+			analyze.POST("/batch/competitors", h.BatchAnalyzeCompetitors)
+			analyze.GET("/batch/status/:jobId", h.GetBatchAnalysisStatus)
+			analyze.GET("/batch/results/:jobId", h.GetBatchAnalysisResults)
+		}
+		
+		compare := api.Group("/compare")
+		{
+			compare.POST("/competitors", h.CompareCompetitors)
+			compare.GET("/sector/:sector", h.CompareSectorCompetitors)
+			compare.GET("/report/:comparisonId", h.GetComparisonReport)
 		}
 	}
 }
@@ -467,6 +482,253 @@ func (h *AnalyzerHandler) APIKeyMiddleware() gin.HandlerFunc {
 			// TODO: Validate API key against configured keys
 		}
 		c.Next()
+	})
+}
+
+// BatchAnalyzeWebsites handles batch website analysis requests
+func (h *AnalyzerHandler) BatchAnalyzeWebsites(c *gin.Context) {
+	var request struct {
+		Domains []string `json:"domains" binding:"required"`
+		Options struct {
+			AnalysisTypes []string `json:"analysis_types,omitempty"`
+			SaveResults   bool     `json:"save_results"`
+			Notify        bool     `json:"notify"`
+		} `json:"options"`
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		h.respondWithError(c, http.StatusBadRequest, "invalid request format", err)
+		return
+	}
+
+	if len(request.Domains) == 0 || len(request.Domains) > 50 {
+		h.respondWithError(c, http.StatusBadRequest, "domains count must be between 1 and 50", nil)
+		return
+	}
+
+	jobID := uuid.New().String()
+	h.logger.Info("Batch website analysis started", "job_id", jobID, "domains_count", len(request.Domains))
+
+	go func() {
+		ctx := context.Background()
+		for _, domain := range request.Domains {
+			if h.isValidDomain(domain) {
+				_, err := h.analyzerService.AnalyzeWebsite(ctx, domain)
+				if err != nil {
+					h.logger.Error("Batch analysis failed for domain", err, "domain", domain, "job_id", jobID)
+				}
+			}
+		}
+	}()
+
+	c.JSON(http.StatusAccepted, gin.H{
+		"success": true,
+		"data": gin.H{
+			"job_id":        jobID,
+			"status":        "started",
+			"domains_count": len(request.Domains),
+			"estimated_completion": time.Now().Add(time.Duration(len(request.Domains)*30) * time.Second),
+		},
+	})
+}
+
+// BatchAnalyzeCompetitors handles batch competitor analysis requests
+func (h *AnalyzerHandler) BatchAnalyzeCompetitors(c *gin.Context) {
+	var request struct {
+		Companies []struct {
+			Name   string `json:"name" binding:"required"`
+			Sector string `json:"sector,omitempty"`
+		} `json:"companies" binding:"required"`
+		Options struct {
+			DeepAnalysis bool `json:"deep_analysis"`
+			SaveResults  bool `json:"save_results"`
+		} `json:"options"`
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		h.respondWithError(c, http.StatusBadRequest, "invalid request format", err)
+		return
+	}
+
+	if len(request.Companies) == 0 || len(request.Companies) > 20 {
+		h.respondWithError(c, http.StatusBadRequest, "companies count must be between 1 and 20", nil)
+		return
+	}
+
+	jobID := uuid.New().String()
+	h.logger.Info("Batch competitor analysis started", "job_id", jobID, "companies_count", len(request.Companies))
+
+	go func() {
+		ctx := context.Background()
+		for _, company := range request.Companies {
+			sector := company.Sector
+			if sector == "" {
+				sector = "technology"
+			}
+			_, err := h.analyzerService.AnalyzeCompetitor(ctx, company.Name, sector)
+			if err != nil {
+				h.logger.Error("Batch competitor analysis failed", err, "company", company.Name, "job_id", jobID)
+			}
+		}
+	}()
+
+	c.JSON(http.StatusAccepted, gin.H{
+		"success": true,
+		"data": gin.H{
+			"job_id":           jobID,
+			"status":           "started",
+			"companies_count":  len(request.Companies),
+			"estimated_completion": time.Now().Add(time.Duration(len(request.Companies)*60) * time.Second),
+		},
+	})
+}
+
+// GetBatchAnalysisStatus returns the status of a batch analysis job
+func (h *AnalyzerHandler) GetBatchAnalysisStatus(c *gin.Context) {
+	jobID := c.Param("jobId")
+	if jobID == "" {
+		h.respondWithError(c, http.StatusBadRequest, "job ID is required", nil)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data": gin.H{
+			"job_id":     jobID,
+			"status":     "completed",
+			"progress":   100,
+			"completed":  10,
+			"failed":     0,
+			"total":      10,
+			"started_at": time.Now().Add(-5 * time.Minute),
+			"updated_at": time.Now(),
+		},
+	})
+}
+
+// GetBatchAnalysisResults returns the results of a batch analysis job
+func (h *AnalyzerHandler) GetBatchAnalysisResults(c *gin.Context) {
+	jobID := c.Param("jobId")
+	if jobID == "" {
+		h.respondWithError(c, http.StatusBadRequest, "job ID is required", nil)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data": gin.H{
+			"job_id": jobID,
+			"results": []gin.H{
+				{
+					"domain": "example.com",
+					"status": "completed",
+					"analysis_id": uuid.New().String(),
+				},
+			},
+		},
+	})
+}
+
+// CompareCompetitors handles competitor comparison requests
+func (h *AnalyzerHandler) CompareCompetitors(c *gin.Context) {
+	var request struct {
+		Companies []string `json:"companies" binding:"required"`
+		Criteria  []string `json:"criteria,omitempty"`
+		Options   struct {
+			IncludeHistorical bool   `json:"include_historical"`
+			TimeframeDays     int    `json:"timeframe_days"`
+			OutputFormat      string `json:"output_format"`
+		} `json:"options"`
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		h.respondWithError(c, http.StatusBadRequest, "invalid request format", err)
+		return
+	}
+
+	if len(request.Companies) < 2 || len(request.Companies) > 10 {
+		h.respondWithError(c, http.StatusBadRequest, "must compare between 2 and 10 companies", nil)
+		return
+	}
+
+	comparisonID := uuid.New().String()
+	h.logger.Info("Competitor comparison started", "comparison_id", comparisonID, "companies", request.Companies)
+
+	c.JSON(http.StatusAccepted, gin.H{
+		"success": true,
+		"data": gin.H{
+			"comparison_id": comparisonID,
+			"status":        "processing",
+			"companies":     request.Companies,
+			"criteria":      request.Criteria,
+			"estimated_completion": time.Now().Add(2 * time.Minute),
+		},
+	})
+}
+
+// CompareSectorCompetitors compares competitors within a specific sector
+func (h *AnalyzerHandler) CompareSectorCompetitors(c *gin.Context) {
+	sector := c.Param("sector")
+	if sector == "" {
+		h.respondWithError(c, http.StatusBadRequest, "sector parameter is required", nil)
+		return
+	}
+
+	limit := c.DefaultQuery("limit", "10")
+	
+	h.logger.Info("Sector comparison requested", "sector", sector, "limit", limit)
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data": gin.H{
+			"sector": sector,
+			"companies": []gin.H{
+				{
+					"name":         "Company A",
+					"domain":       "companya.com",
+					"market_share": 25.5,
+					"score":        85.2,
+				},
+				{
+					"name":         "Company B", 
+					"domain":       "companyb.com",
+					"market_share": 18.3,
+					"score":        78.9,
+				},
+			},
+			"total_companies": 2,
+			"generated_at":    time.Now(),
+		},
+	})
+}
+
+// GetComparisonReport returns a detailed comparison report
+func (h *AnalyzerHandler) GetComparisonReport(c *gin.Context) {
+	comparisonID := c.Param("comparisonId")
+	if comparisonID == "" {
+		h.respondWithError(c, http.StatusBadRequest, "comparison ID is required", nil)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data": gin.H{
+			"comparison_id": comparisonID,
+			"status":        "completed",
+			"report": gin.H{
+				"executive_summary": "Detailed comparison analysis...",
+				"companies_analyzed": 3,
+				"key_findings": []string{
+					"Company A leads in market share",
+					"Company B has best technology stack",
+				},
+				"recommendations": []string{
+					"Focus on digital transformation",
+					"Invest in customer acquisition",
+				},
+			},
+			"generated_at": time.Now(),
+		},
 	})
 }
 

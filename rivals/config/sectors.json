@@ -1,0 +1,107 @@
+{
+  "sectors": {
+    "technology": {
+      "name": "Technology",
+      "description": "Software, hardware, and IT services companies",
+      "subcategories": [
+        "saas",
+        "e-commerce",
+        "fintech",
+        "healthtech",
+        "edtech",
+        "cybersecurity",
+        "ai-ml",
+        "blockchain"
+      ],
+      "key_metrics": [
+        "monthly_active_users",
+        "revenue_growth",
+        "customer_acquisition_cost",
+        "churn_rate",
+        "market_share"
+      ]
+    },
+    "finance": {
+      "name": "Financial Services",
+      "description": "Banking, investment, insurance, and fintech companies",
+      "subcategories": [
+        "banking",
+        "investment",
+        "insurance",
+        "payments",
+        "lending",
+        "wealth_management"
+      ],
+      "key_metrics": [
+        "assets_under_management",
+        "loan_portfolio",
+        "customer_deposits",
+        "transaction_volume",
+        "compliance_score"
+      ]
+    },
+    "healthcare": {
+      "name": "Healthcare",
+      "description": "Pharmaceutical, biotech, medical devices, and health services",
+      "subcategories": [
+        "pharmaceuticals",
+        "biotech",
+        "medical_devices",
+        "health_services",
+        "telemedicine",
+        "health_insurance"
+      ],
+      "key_metrics": [
+        "drug_pipeline",
+        "clinical_trials",
+        "regulatory_approvals",
+        "patient_outcomes",
+        "market_penetration"
+      ]
+    },
+    "retail": {
+      "name": "Retail & E-commerce",
+      "description": "Traditional retail and online commerce companies",
+      "subcategories": [
+        "fashion",
+        "electronics",
+        "home_goods",
+        "food_beverage",
+        "marketplace",
+        "subscription_commerce"
+      ],
+      "key_metrics": [
+        "gross_merchandise_value",
+        "conversion_rate",
+        "average_order_value",
+        "inventory_turnover",
+        "customer_lifetime_value"
+      ]
+    },
+    "media": {
+      "name": "Media & Entertainment",
+      "description": "Content creation, streaming, gaming, and media companies",
+      "subcategories": [
+        "streaming",
+        "gaming",
+        "social_media",
+        "publishing",
+        "music",
+        "video_content"
+      ],
+      "key_metrics": [
+        "subscribers",
+        "content_library_size",
+        "engagement_time",
+        "ad_revenue",
+        "content_creation_rate"
+      ]
+    }
+  },
+  "analysis_settings": {
+    "default_competitors_per_sector": 10,
+    "update_frequency_days": 7,
+    "data_retention_months": 24,
+    "minimum_company_size": "startup"
+  }
+}

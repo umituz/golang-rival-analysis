@@ -1,0 +1,83 @@
+{
+  "company_profile": {
+    "basic_info": {
+      "name": "",
+      "domain": "",
+      "founded": "",
+      "headquarters": "",
+      "industry": "",
+      "sector": "",
+      "company_size": "",
+      "business_model": "",
+      "description": ""
+    },
+    "contact_info": {
+      "website": "",
+      "email": "",
+      "phone": "",
+      "address": {
+        "street": "",
+        "city": "",
+        "state": "",
+        "country": "",
+        "postal_code": ""
+      }
+    },
+    "leadership": {
+      "ceo": "",
+      "cto": "",
+      "cfo": "",
+      "key_executives": []
+    },
+    "financial_info": {
+      "funding_stage": "",
+      "total_funding": 0,
+      "last_funding_round": {
+        "date": "",
+        "amount": 0,
+        "round_type": "",
+        "investors": []
+      },
+      "valuation": 0,
+      "revenue": 0,
+      "employee_count": 0
+    },
+    "market_position": {
+      "target_market": "",
+      "market_share": 0,
+      "main_competitors": [],
+      "competitive_advantages": [],
+      "market_opportunities": [],
+      "threats": []
+    },
+    "products_services": {
+      "main_offerings": [],
+      "pricing_model": "",
+      "customer_segments": [],
+      "distribution_channels": []
+    },
+    "technology_stack": {
+      "web_technologies": [],
+      "programming_languages": [],
+      "frameworks": [],
+      "databases": [],
+      "cloud_providers": [],
+      "third_party_services": []
+    },
+    "social_media": {
+      "twitter": "",
+      "linkedin": "",
+      "facebook": "",
+      "instagram": "",
+      "youtube": "",
+      "other_platforms": {}
+    },
+    "analysis_metadata": {
+      "last_updated": "",
+      "data_sources": [],
+      "analysis_id": "",
+      "confidence_score": 0,
+      "next_update_due": ""
+    }
+  }
+}

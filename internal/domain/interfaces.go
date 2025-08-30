@@ -44,14 +44,6 @@ type HTTPClient interface {
 	GetWithTimeout(ctx context.Context, url string, timeout time.Duration) (*HTTPResponse, error)
 }
 
-// HTTPResponse represents HTTP response data
-type HTTPResponse struct {
-	StatusCode   int
-	Headers      map[string]string
-	Body         []byte
-	ResponseTime time.Duration
-	Size         int64
-}
 
 // DNSClient defines the interface for DNS operations
 type DNSClient interface {
@@ -78,14 +70,6 @@ type SSLClient interface {
 	CheckExpiry(ctx context.Context, domain string) (time.Time, error)
 }
 
-// SSLValidationResult represents SSL certificate validation results
-type SSLValidationResult struct {
-	IsValid      bool
-	ErrorMessage string
-	Chain        []*SSLInfo
-	IsSelfSigned bool
-	IsExpired    bool
-}
 
 // WebScraper defines the interface for web scraping operations
 type WebScraper interface {
@@ -96,34 +80,6 @@ type WebScraper interface {
 	DetectTechnologies(ctx context.Context, url string) (*TechnologyStack, error)
 }
 
-// ScrapedContent represents scraped web content
-type ScrapedContent struct {
-	URL         string
-	Title       string
-	Description string
-	Keywords    []string
-	Headings    map[string][]string
-	Links       []Link
-	Images      []Image
-	Text        string
-	Languages   []string
-}
-
-// Link represents a link found on a webpage
-type Link struct {
-	URL      string `json:"url"`
-	Text     string `json:"text"`
-	IsInternal bool `json:"is_internal"`
-	IsExternal bool `json:"is_external"`
-}
-
-// Image represents an image found on a webpage
-type Image struct {
-	URL    string `json:"url"`
-	Alt    string `json:"alt"`
-	Width  int    `json:"width"`
-	Height int    `json:"height"`
-}
 
 // APIClient defines the interface for external API operations
 type APIClient interface {
@@ -186,15 +142,6 @@ type PerformanceMonitor interface {
 	GetPerformanceScore(analysis *PerformanceAnalysis) int
 }
 
-// PerformanceMetrics represents detailed performance metrics
-type PerformanceMetrics struct {
-	ResponseTime     time.Duration
-	FirstByteTime    time.Duration
-	DOMContentLoaded time.Duration
-	LoadTime         time.Duration
-	PageSize         int64
-	RequestCount     int
-}
 
 // SEOAnalyzer defines the interface for SEO analysis operations
 type SEOAnalyzer interface {
@@ -216,49 +163,3 @@ type CompetitorAnalyzer interface {
 	TrackCompetitorChanges(ctx context.Context, companyName string) (*CompetitorChanges, error)
 }
 
-// ComparisonReport represents competitor comparison results
-type ComparisonReport struct {
-	Companies    []*CompetitorInfo `json:"companies"`
-	Metrics      *ComparisonMetrics `json:"metrics"`
-	Rankings     map[string]int     `json:"rankings"`
-	Insights     []string           `json:"insights"`
-	GeneratedAt  time.Time          `json:"generated_at"`
-}
-
-// ComparisonMetrics represents comparison metrics between competitors
-type ComparisonMetrics struct {
-	TrafficComparison  map[string]int64   `json:"traffic_comparison"`
-	SocialComparison   map[string]int64   `json:"social_comparison"`
-	FundingComparison  map[string]int64   `json:"funding_comparison"`
-	EmployeeComparison map[string]int     `json:"employee_comparison"`
-}
-
-// MarketInsights represents market analysis insights
-type MarketInsights struct {
-	Sector          string                 `json:"sector"`
-	MarketSize      int64                  `json:"market_size"`
-	GrowthRate      float64                `json:"growth_rate"`
-	TopPlayers      []string               `json:"top_players"`
-	Trends          []string               `json:"trends"`
-	Opportunities   []string               `json:"opportunities"`
-	Threats         []string               `json:"threats"`
-	KeyMetrics      map[string]interface{} `json:"key_metrics"`
-	LastUpdated     time.Time              `json:"last_updated"`
-}
-
-// CompetitorChanges represents tracked changes in competitor data
-type CompetitorChanges struct {
-	CompanyName     string                 `json:"company_name"`
-	Changes         []Change               `json:"changes"`
-	LastCheck       time.Time              `json:"last_check"`
-	SignificantChanges bool                `json:"significant_changes"`
-}
-
-// Change represents a tracked change
-type Change struct {
-	Field       string      `json:"field"`
-	OldValue    interface{} `json:"old_value"`
-	NewValue    interface{} `json:"new_value"`
-	ChangedAt   time.Time   `json:"changed_at"`
-	Significance string     `json:"significance"`
-}

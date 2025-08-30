@@ -52,3 +52,15 @@ build/
 # Coverage files
 coverage.txt
 coverage.html
+
+# Analysis data (sensitive - never commit research targets)
+rivals/companies/
+rivals/sectors/
+rivals/comparisons/
+rivals/historical/
+
+# Documentation folder
+docs/
+
+# Project instructions (private)
+CLAUDE.md

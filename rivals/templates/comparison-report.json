@@ -1,0 +1,95 @@
+{
+  "comparison_report": {
+    "metadata": {
+      "comparison_id": "",
+      "title": "",
+      "description": "",
+      "created_date": "",
+      "analyst": "",
+      "companies_compared": [],
+      "comparison_criteria": [],
+      "analysis_period": {
+        "start_date": "",
+        "end_date": ""
+      }
+    },
+    "executive_summary": {
+      "key_findings": [],
+      "recommendations": [],
+      "market_leader": "",
+      "emerging_player": "",
+      "investment_attractiveness": {}
+    },
+    "company_comparisons": {
+      "financial_metrics": {
+        "revenue": {},
+        "growth_rate": {},
+        "funding": {},
+        "valuation": {},
+        "profitability": {}
+      },
+      "market_metrics": {
+        "market_share": {},
+        "customer_base": {},
+        "geographic_reach": {},
+        "brand_recognition": {}
+      },
+      "operational_metrics": {
+        "employee_count": {},
+        "product_portfolio": {},
+        "customer_satisfaction": {},
+        "innovation_score": {}
+      },
+      "digital_presence": {
+        "website_performance": {},
+        "seo_rankings": {},
+        "social_media_engagement": {},
+        "online_reputation": {}
+      },
+      "technology_comparison": {
+        "tech_stack": {},
+        "security_score": {},
+        "performance_metrics": {},
+        "mobile_optimization": {}
+      }
+    },
+    "competitive_analysis": {
+      "strengths_weaknesses": {},
+      "competitive_positioning": {},
+      "differentiation_factors": {},
+      "market_opportunities": {},
+      "threat_assessment": {}
+    },
+    "trend_analysis": {
+      "market_trends": [],
+      "technology_trends": [],
+      "customer_behavior_trends": [],
+      "regulatory_trends": []
+    },
+    "scoring": {
+      "overall_scores": {},
+      "category_scores": {
+        "financial_health": {},
+        "market_position": {},
+        "innovation": {},
+        "operational_efficiency": {},
+        "digital_maturity": {}
+      },
+      "scoring_methodology": ""
+    },
+    "recommendations": {
+      "strategic_recommendations": [],
+      "tactical_recommendations": [],
+      "investment_recommendations": [],
+      "partnership_opportunities": [],
+      "acquisition_targets": []
+    },
+    "appendices": {
+      "data_sources": [],
+      "methodology": "",
+      "assumptions": [],
+      "limitations": [],
+      "raw_data_references": []
+    }
+  }
+}

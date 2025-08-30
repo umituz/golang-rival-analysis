@@ -1,0 +1,136 @@
+{
+  "data_sources": {
+    "web_analysis": {
+      "enabled": true,
+      "endpoints": [
+        "website",
+        "ssl",
+        "dns",
+        "whois",
+        "content",
+        "security",
+        "performance",
+        "seo"
+      ],
+      "rate_limit": {
+        "requests_per_minute": 60,
+        "concurrent_requests": 10
+      }
+    },
+    "social_media": {
+      "platforms": {
+        "twitter": {
+          "enabled": false,
+          "api_key_required": true,
+          "rate_limit": 300
+        },
+        "linkedin": {
+          "enabled": false,
+          "api_key_required": true,
+          "rate_limit": 100
+        },
+        "facebook": {
+          "enabled": false,
+          "api_key_required": true,
+          "rate_limit": 200
+        },
+        "instagram": {
+          "enabled": false,
+          "api_key_required": true,
+          "rate_limit": 200
+        },
+        "youtube": {
+          "enabled": false,
+          "api_key_required": true,
+          "rate_limit": 100
+        }
+      }
+    },
+    "market_intelligence": {
+      "similarweb": {
+        "enabled": false,
+        "api_key_required": true,
+        "endpoints": [
+          "traffic",
+          "engagement",
+          "audience",
+          "competitors"
+        ]
+      },
+      "crunchbase": {
+        "enabled": false,
+        "api_key_required": true,
+        "endpoints": [
+          "company_info",
+          "funding",
+          "acquisitions",
+          "people"
+        ]
+      },
+      "clearbit": {
+        "enabled": false,
+        "api_key_required": true,
+        "endpoints": [
+          "enrichment",
+          "discovery",
+          "prospector"
+        ]
+      }
+    },
+    "financial_data": {
+      "alpha_vantage": {
+        "enabled": false,
+        "api_key_required": true,
+        "endpoints": [
+          "stock_price",
+          "financial_statements",
+          "earnings"
+        ]
+      },
+      "yahoo_finance": {
+        "enabled": true,
+        "api_key_required": false,
+        "endpoints": [
+          "stock_price",
+          "company_info"
+        ]
+      }
+    },
+    "news_sentiment": {
+      "news_api": {
+        "enabled": false,
+        "api_key_required": true,
+        "sources": [
+          "techcrunch",
+          "reuters",
+          "bloomberg",
+          "wsj"
+        ]
+      },
+      "google_news": {
+        "enabled": true,
+        "api_key_required": false,
+        "max_articles": 50
+      }
+    }
+  },
+  "collection_settings": {
+    "update_intervals": {
+      "website_analysis": "daily",
+      "social_media": "weekly",
+      "market_data": "monthly",
+      "news_sentiment": "daily"
+    },
+    "data_retention": {
+      "raw_data_months": 6,
+      "aggregated_data_months": 24,
+      "reports_months": 36
+    },
+    "quality_checks": {
+      "verify_data_freshness": true,
+      "remove_duplicates": true,
+      "validate_schemas": true,
+      "flag_anomalies": true
+    }
+  }
+}

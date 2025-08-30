@@ -240,3 +240,77 @@ type AnalysisReport struct {
 	Tags        []string              `json:"tags,omitempty"`
 	Error       string                `json:"error,omitempty"`
 }
+
+// Additional domain types for infrastructure
+
+// HTTPResponse represents HTTP response data
+type HTTPResponse struct {
+	StatusCode   int               `json:"status_code"`
+	Headers      map[string]string `json:"headers"`
+	Body         []byte            `json:"body"`
+	ResponseTime time.Duration     `json:"response_time"`
+	Size         int64             `json:"size"`
+}
+
+// ScrapedContent represents scraped web content
+type ScrapedContent struct {
+	URL         string   `json:"url"`
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	Keywords    []string `json:"keywords"`
+	Text        string   `json:"text"`
+	Links       []Link   `json:"links"`
+	Images      []Image  `json:"images"`
+	Languages   []string `json:"languages"`
+}
+
+// Link represents a hyperlink
+type Link struct {
+	URL  string `json:"url"`
+	Text string `json:"text"`
+}
+
+// Image represents an image
+type Image struct {
+	URL string `json:"url"`
+	Alt string `json:"alt"`
+}
+
+// SSLValidationResult represents SSL validation result
+type SSLValidationResult struct {
+	IsValid      bool   `json:"is_valid"`
+	IsExpired    bool   `json:"is_expired"`
+	ErrorMessage string `json:"error_message,omitempty"`
+}
+
+// PerformanceMetrics represents performance measurement data
+type PerformanceMetrics struct {
+	ResponseTime     time.Duration `json:"response_time"`
+	FirstByteTime    time.Duration `json:"first_byte_time"`
+	DOMContentLoaded time.Duration `json:"dom_content_loaded"`
+	LoadTime         time.Duration `json:"load_time"`
+	PageSize         int64         `json:"page_size"`
+	RequestCount     int           `json:"request_count"`
+}
+
+// ComparisonReport represents comparison analysis report
+type ComparisonReport struct {
+	ID           string    `json:"id"`
+	Companies    []string  `json:"companies"`
+	GeneratedAt  time.Time `json:"generated_at"`
+	Summary      string    `json:"summary"`
+}
+
+// MarketInsights represents market analysis insights
+type MarketInsights struct {
+	Sector      string    `json:"sector"`
+	LastUpdated time.Time `json:"last_updated"`
+	Trends      []string  `json:"trends"`
+}
+
+// CompetitorChanges represents changes in competitor data
+type CompetitorChanges struct {
+	CompanyName string    `json:"company_name"`
+	LastCheck   time.Time `json:"last_check"`
+	Changes     []string  `json:"changes"`
+}

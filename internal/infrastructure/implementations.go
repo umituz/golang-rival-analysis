@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -601,7 +602,41 @@ func NewReportRepository(cfg *config.Config, log *logger.Logger) *ReportReposito
 
 func (r *ReportRepositoryImpl) Save(ctx context.Context, report *domain.AnalysisReport) error {
 	r.logger.Info("Saving report", "id", report.ID, "domain", report.Domain)
+	
+	// Create output directory for company
+	outputDir := fmt.Sprintf("rivals/companies/%s/output", report.Domain)
+	if err := r.ensureDir(outputDir); err != nil {
+		r.logger.Error("Failed to create output directory", err, "dir", outputDir)
+		return err
+	}
+	
+	// Save report as JSON file
+	filename := fmt.Sprintf("%s/%s-analysis-%s.json", 
+		outputDir, 
+		report.AnalysisType, 
+		report.StartTime.Format("20060102-150405"))
+	
+	data, err := json.MarshalIndent(report, "", "  ")
+	if err != nil {
+		return fmt.Errorf("failed to marshal report: %w", err)
+	}
+	
+	file, err := os.Create(filename)
+	if err != nil {
+		return fmt.Errorf("failed to create report file: %w", err)
+	}
+	defer file.Close()
+	
+	if _, err := file.Write(data); err != nil {
+		return fmt.Errorf("failed to write report: %w", err)
+	}
+	
+	r.logger.Info("Report saved successfully", "file", filename)
 	return nil
+}
+
+func (r *ReportRepositoryImpl) ensureDir(path string) error {
+	return os.MkdirAll(path, 0755)
 }
 
 func (r *ReportRepositoryImpl) GetByID(ctx context.Context, id string) (*domain.AnalysisReport, error) {
